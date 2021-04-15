@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WarmUp
 {
-    public class NumberArrayConverter
+    public class SplitArray
     {
         public (long[], long[]) SplitToEvenAndOdd(long[] array)
         {
@@ -25,6 +25,27 @@ namespace WarmUp
 
             return (even.ToArray(), odd.ToArray());
 
+        }
+
+        public (long[], long[]) SplitOnHalfs(long[] array)
+        {
+            List<long> left = new List<long>();
+            List<long> right = new List<long>();
+
+            var halfIndex = (array.Length / 2) + array.Length%2;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if(i < halfIndex)
+                {
+                    left.Add(array[i]);
+                }
+                else
+                {
+                    right.Add(array[i]);
+                }
+            }
+            return (left.ToArray(), right.ToArray());
         }
     }
 }
