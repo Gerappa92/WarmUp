@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace WarmUp
 {
@@ -46,6 +44,26 @@ namespace WarmUp
                 }
             }
             return (left.ToArray(), right.ToArray());
+        }
+
+        public (long[], long[]) SplitToPositiveAndNegative(long[] array)
+        {
+            List<long> positive = new List<long>();
+            List<long> negative = new List<long>();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if(array[i] < 0)
+                {
+                    negative.Add(array[i]);
+                }
+                else
+                {
+                    positive.Add(array[i]);
+                }
+            }
+
+            return (positive.ToArray(), negative.ToArray());
         }
     }
 }
