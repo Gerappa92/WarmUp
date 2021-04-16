@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WarmUp
 {
     public class ArrayDivider
     {
-        public (long[], long[]) DivideToEvenAndOdd(long[] array)
+        public (long[], long[]) Divide(long[] array, int divideIndex)
         {
-            List<long> even = new List<long>();
-            List<long> odd = new List<long>();
+            List<long> left = new List<long>();
+            List<long> right = new List<long>();
 
             for (int i = 0; i < array.Length; i++)
             {
-                if(array[i]%2 == 0)
+                if(i <= divideIndex)
                 {
-                    even.Add(array[i]);
+                    left.Add(array[i]);
                 }
-                else if(array[i]%2 == 1)
+                else
                 {
-                    odd.Add(array[i]);
+                    right.Add(array[i]);
                 }
             }
 
-            return (even.ToArray(), odd.ToArray());
-
+            return (left.ToArray(), right.ToArray());
         }
-
         public (long[], long[]) DivideOnHalfs(long[] array)
         {
             List<long> left = new List<long>();
@@ -46,7 +43,26 @@ namespace WarmUp
             }
             return (left.ToArray(), right.ToArray());
         }
+        public (long[], long[]) DivideToEvenAndOdd(long[] array)
+        {
+            List<long> even = new List<long>();
+            List<long> odd = new List<long>();
 
+            for (int i = 0; i < array.Length; i++)
+            {
+                if(array[i]%2 == 0)
+                {
+                    even.Add(array[i]);
+                }
+                else
+                {
+                    odd.Add(array[i]);
+                }
+            }
+
+            return (even.ToArray(), odd.ToArray());
+
+        }
         public (long[], long[]) DivideToPositiveAndNegative(long[] array)
         {
             List<long> positive = new List<long>();
@@ -65,11 +81,6 @@ namespace WarmUp
             }
 
             return (positive.ToArray(), negative.ToArray());
-        }
-
-        public (long[], long[]) Divide(long[] array, int divideIndex)
-        {
-            throw new NotImplementedException();
         }
     }
 }

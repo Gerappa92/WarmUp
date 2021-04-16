@@ -7,57 +7,95 @@ namespace WarmUp.Tests
     [TestFixture]
     public class ArrayDividerTests
     {
-        Fixture _fixture = new Fixture();
-        ArrayDivider _arrayDivider;
+        private Fixture _fixture = new Fixture();
+        private ArrayDivider _arrayDivider;
+        private long[] _array;
+        private int _divideIndex;
 
         [SetUp]
         public void SetUp()
         {
             _arrayDivider = new ArrayDivider();
+            _array = new long[] { 0, 123, 65, 58, 6, -77, 6669, -56, 657, -5, 874, -645, -1, 1, 8, 78 };
+            _divideIndex = 4;
         }
+
+        #region DIVIDE
+
+        [Test]
+        public void Devide_ReturnNumbers_Which_Exist_In_IputArray()
+        {
+            var (left, rigth) = _arrayDivider.Divide(_array, _divideIndex);
+            
+            Assert.IsFalse(left.Any(l => !_array.Any(a => l == a)));
+            Assert.IsFalse(rigth.Any(l => !_array.Any(a => l == a)));
+        }
+
+        [Test]
+        public void Devide_ReturnArrays_Which_Lenght_Are_Equal_InputArrayLength()
+        {
+            var (left, right) = _arrayDivider.Divide(_array, _divideIndex);
+
+            Assert.AreEqual(_array.Length, left.Length + right.Length);
+        }
+
+        [Test]
+        public void Devide_ReturnLeftArray_Where_Length_Is_Equal_DevideIndexPlusOne()
+        {
+            var (left, right) = _arrayDivider.Divide(_array, _divideIndex);
+
+            Assert.AreEqual(_divideIndex + 1, left.Length);
+        }
+
+        [Test]
+        public void Devide_ReturnRightArray_Where_Length_Is_Equal_InputArrayLength_Minus_DevideIndex_Minus_One()
+        {
+            var (left, right) = _arrayDivider.Divide(_array, _divideIndex);
+
+            Assert.AreEqual(_array.Length - _divideIndex - 1, right.Length);
+        }
+
+        [Test]
+        public void Devide_ReturnEmptyRigtArray_When_DivideIndex_IsGreaterThan_InputArrayLength()
+        {
+            int divideIndex = _array.Length + 10;
+            var (left, right) = _arrayDivider.Divide(_array, divideIndex);
+
+            Assert.AreEqual(0, right.Length);
+        }
+
+        #endregion
 
         #region DIVIDE TO EVEN AND ODD
 
         [Test]
         public void DivideToEvenAndOdd_Return_OnlyEven_InFirstArray()
         {
-            var array = _fixture.CreateMany<long>().ToArray();
-            var (even, _) = _arrayDivider.DivideToEvenAndOdd(array);
+            var (even, _) = _arrayDivider.DivideToEvenAndOdd(_array);
             Assert.IsFalse(even.Any(e => e % 2 == 1));
         }
 
         [Test]
         public void DivideToEvenAndOdd_Return_OnlyOdd_InSecondArray()
         {
-            var array = _fixture.CreateMany<long>().ToArray();
-            var (_, odd) = _arrayDivider.DivideToEvenAndOdd(array);
+            var (_, odd) = _arrayDivider.DivideToEvenAndOdd(_array);
             Assert.IsFalse(odd.Any(e => e % 2 == 0));
         }
 
         [Test]
         public void DivideToEvenAndOdd_Return_Arrays_ThatLenghtsAreEqual_InputArrayLength()
         {
-            var array = _fixture.CreateMany<long>().ToArray();
-            var (even, odd) = _arrayDivider.DivideToEvenAndOdd(array);
-            Assert.AreEqual(array.Count(), even.Length + odd.Length);
+            var (even, odd) = _arrayDivider.DivideToEvenAndOdd(_array);
+            Assert.AreEqual(_array.Length, even.Length + odd.Length);
         }
 
         [Test]
         public void DivideToEvenAndOdd_Return_Arrays_WhereNumbers_ExistInInputArray()
         {
-            var array = _fixture.CreateMany<long>().ToArray();
-            var (even, odd) = _arrayDivider.DivideToEvenAndOdd(array);
+            var (even, odd) = _arrayDivider.DivideToEvenAndOdd(_array);
 
-            bool numberNotExist = false;
-            for (int i = 0; i < array.Length; i++)
-            {
-                if (!even.Any(e => e == array[i]) && !odd.Any(o => o == array[i]))
-                {
-                    numberNotExist = true;
-                    break;
-                }
-            }
-            Assert.IsFalse(numberNotExist);
+            Assert.IsFalse(even.Any(e => !_array.Any(a => e == a)));
+            Assert.IsFalse(odd.Any(o => !_array.Any(a => o == a)));
         }
 
         [Test]
@@ -102,7 +140,7 @@ namespace WarmUp.Tests
         [Test]
         public void DivideOnHalfs_Return_Second_Array_Empty_When_ArrayHas_Only_One_Element()
         {
-            var array = _fixture.CreateMany<long>(1).ToArray();
+            var array = new long[] { 5 };
             var (left, right) = _arrayDivider.DivideOnHalfs(array);
 
             Assert.AreEqual(0, right.Length);
@@ -111,18 +149,17 @@ namespace WarmUp.Tests
         [Test]
         public void DivideOnHalfs_Return_Two_Arrays_Where_Left_Has_Half_Elements_From_Array_And_Right_Has_SecondHalfElements()
         {
-            var array = _fixture.CreateMany<long>().ToArray();
-            var (left, right) = _arrayDivider.DivideOnHalfs(array);
+            var (left, right) = _arrayDivider.DivideOnHalfs(_array);
 
             bool isLeftEqual = true;
             bool isRightEqual = true;
-            var halfIndex = (array.Length / 2) + array.Length % 2;
+            var halfIndex = (_array.Length / 2) + _array.Length % 2;
 
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < _array.Length; i++)
             {
                 if(i < halfIndex)
                 {
-                    if(array[i] != left[i])
+                    if(_array[i] != left[i])
                     {
                         isLeftEqual = false;
                     }
@@ -130,7 +167,7 @@ namespace WarmUp.Tests
                 else
                 {
                     var rightIndex = i - halfIndex;
-                    if (array[i] != right[rightIndex])
+                    if (_array[i] != right[rightIndex])
                     {
                         isRightEqual = false;
                     }
@@ -147,8 +184,7 @@ namespace WarmUp.Tests
         [Test]
         public void In_PositiveArray_Are_Only_Positive()
         {
-            var array = new long[] { 0, 12, -52, 63, 126, -89, 465, -6714, 5654 };
-            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(array);
+            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(_array);
 
             Assert.IsFalse(positive.Any(p => p < 0));
         }
@@ -156,8 +192,7 @@ namespace WarmUp.Tests
         [Test]
         public void In_NegativeArray_Are_Only_Negative()
         {
-            var array = new long[] { 0, 12, -52, 63, 126, -89, 465, -6714, 5654 };
-            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(array);
+            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(_array);
 
             Assert.IsFalse(negative.Any(p => p >= 0));
         }
@@ -165,20 +200,18 @@ namespace WarmUp.Tests
         [Test]
         public void LengthOfTwoReturnedArrays_Are_Equal_InputArrayLength()
         {
-            var array = new long[] { 0, 12, -52, 63, 126, -89, 465, -6714, 5654 };
-            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(array);
+            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(_array);
 
-            Assert.AreEqual(array.Length, positive.Length + negative.Length);
+            Assert.AreEqual(_array.Length, positive.Length + negative.Length);
         }
 
         [Test]
         public void NumbersInReturnedArrays_Exist_InInputArray()
         {
-            var array = new long[] { 0, 12, -52, 63, 126, -89, 465, -6714, 5654 };
-            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(array);
+            var (positive, negative) = _arrayDivider.DivideToPositiveAndNegative(_array);
 
-            Assert.IsTrue(positive.Any(p => array.Any(a => a == p)));
-            Assert.IsTrue(negative.Any(p => array.Any(a => a == p)));
+            Assert.IsFalse(positive.Any(p => !_array.Any(a => a == p)));
+            Assert.IsFalse(negative.Any(p => !_array.Any(a => a == p)));
         }
 
         #endregion
