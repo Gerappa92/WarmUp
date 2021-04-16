@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WarmUp
 {
-    public class SplitArray
+    public class ArrayDivider
     {
-        public (long[], long[]) SplitToEvenAndOdd(long[] array)
+        public (long[], long[]) DivideToEvenAndOdd(long[] array)
         {
             List<long> even = new List<long>();
             List<long> odd = new List<long>();
@@ -25,7 +26,7 @@ namespace WarmUp
 
         }
 
-        public (long[], long[]) SplitOnHalfs(long[] array)
+        public (long[], long[]) DivideOnHalfs(long[] array)
         {
             List<long> left = new List<long>();
             List<long> right = new List<long>();
@@ -46,7 +47,7 @@ namespace WarmUp
             return (left.ToArray(), right.ToArray());
         }
 
-        public (long[], long[]) SplitToPositiveAndNegative(long[] array)
+        public (long[], long[]) DivideToPositiveAndNegative(long[] array)
         {
             List<long> positive = new List<long>();
             List<long> negative = new List<long>();
@@ -64,6 +65,11 @@ namespace WarmUp
             }
 
             return (positive.ToArray(), negative.ToArray());
+        }
+
+        public (long[], long[]) Divide(long[] array, int divideIndex)
+        {
+            throw new NotImplementedException();
         }
     }
 }
