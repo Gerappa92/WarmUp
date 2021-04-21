@@ -2,7 +2,7 @@ using AutoFixture;
 using NUnit.Framework;
 using System.Linq;
 
-namespace WarmUp.Tests
+namespace WarmUp.Tests.Unit
 {
     [TestFixture]
     public class ArrayDividerTests
