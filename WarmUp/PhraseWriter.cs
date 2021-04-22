@@ -5,7 +5,7 @@ namespace WarmUp
 {
     public class PhraseWriter
     {
-        public string CamelCase(string phrase)
+        public string PascalCase(string phrase)
         {
             if (string.IsNullOrEmpty(phrase))
             {
@@ -18,13 +18,23 @@ namespace WarmUp
             foreach (var word in words)
             {
                 var camelWord = word.ToLower();
-                camelWord = char.ToUpper(camelWord[0]) + camelWord.Remove(0,1);
+                camelWord = char.ToUpper(camelWord[0]) + camelWord.Remove(0, 1);
                 camelBuilder.Append(camelWord);
             }
 
             var camelPhrase = camelBuilder.ToString();
-            camelPhrase = char.ToLower(camelPhrase[0]) + camelPhrase.Remove(0, 1);
             return camelPhrase;
+        }
+
+        public string CamelCase(string phrase)
+        {
+            if (string.IsNullOrEmpty(phrase))
+            {
+                return phrase;
+            }
+            var pascal = PascalCase(phrase);
+            var camel = char.ToLower(pascal[0]) + pascal.Remove(0, 1);
+            return camel;
         }
     }
 }
