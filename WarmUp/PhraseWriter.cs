@@ -13,17 +13,12 @@ namespace WarmUp
             }
 
             var camelBuilder = new StringBuilder();
-            var words = phrase.Split(' ').Where(w => !string.IsNullOrEmpty(w)).ToArray();
+            var words = phrase.Split(' ')
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w => w.ToLower())
+                .Select(w => char.ToUpper(w[0]) + w.Remove(0, 1));
 
-            foreach (var word in words)
-            {
-                var camelWord = word.ToLower();
-                camelWord = char.ToUpper(camelWord[0]) + camelWord.Remove(0, 1);
-                camelBuilder.Append(camelWord);
-            }
-
-            var camelPhrase = camelBuilder.ToString();
-            return camelPhrase;
+            return string.Join(null, words);
         }
 
         public string CamelCase(string phrase)
@@ -35,6 +30,20 @@ namespace WarmUp
             var pascal = PascalCase(phrase);
             var camel = char.ToLower(pascal[0]) + pascal.Remove(0, 1);
             return camel;
+        }
+
+        public string SnakeCase(string phrase)
+        {
+            if (string.IsNullOrEmpty(phrase))
+            {
+                return phrase;
+            }
+
+            var words = phrase.Split(' ')
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w => w.ToLower());
+
+            return string.Join('_', words);
         }
     }
 }
