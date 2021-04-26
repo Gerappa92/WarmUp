@@ -82,6 +82,72 @@ namespace WarmUp.Tests.Unit
 
         #endregion
 
+        #region KEBAB_CASE
+
+        [Test]
+        public void KebabCase_Return_EachLetterLower()
+        {
+            var letters = _phrase
+                .Where(c => !char.IsWhiteSpace(c))
+                .Select(c => char.ToLower(c));
+
+            var kebab = _phraseWriter.KebabCase(_phrase);
+
+            bool areLower = true;
+            foreach (var letter in letters)
+            {
+                if (kebab.IndexOf(letter) < 0)
+                {
+                    areLower = false;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(areLower);
+        }
+
+        [Test]
+        public void KebabCase_Return_HyphensBetweenWords()
+        {
+            var underscoreCount = _phrase.Split(' ')
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Count() - 1;
+
+            var kebab = _phraseWriter.KebabCase(_phrase);
+
+            Assert.AreEqual(underscoreCount, kebab.Where(c => c == '-').Count());
+        }
+
+        [Test]
+        public void KebabCase_Return_PhraseWithoutWhiteSpaces()
+        {
+            var kebab = _phraseWriter.KebabCase(_phrase);
+            Assert.IsFalse(kebab.Any(l => char.IsWhiteSpace(l)));
+        }
+
+        [Test]
+        public void KebabCase_Return_Empty_When_InputIsEmpty()
+        {
+            var kebab = _phraseWriter.KebabCase(string.Empty);
+            Assert.IsEmpty(kebab);
+        }
+
+        [Test]
+        public void KebabCase_Return_String_Where_LenghtIsEqual_To_InputPhrase_Without_WhiteSpaces_Plus_HyphensBetweenWords()
+        {
+            var phareseLength = _phrase.Split(' ')
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Count() - 1 +
+                _phrase.Where(c => !char.IsWhiteSpace(c))
+                .Count();
+
+            var kebab = _phraseWriter.KebabCase(_phrase);
+
+            Assert.AreEqual(phareseLength, kebab.Length);
+        }
+
+        #endregion
+
         #region PASCAL_CASE
 
         [Test]

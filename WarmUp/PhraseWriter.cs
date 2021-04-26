@@ -45,5 +45,19 @@ namespace WarmUp
 
             return string.Join('_', words);
         }
+
+        public string KebabCase(string phrase)
+        {
+            if (string.IsNullOrEmpty(phrase))
+            {
+                return phrase;
+            }
+
+            var words = phrase.Split(' ')
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w => w.ToLower());
+
+            return string.Join('-', words);
+        }
     }
 }
